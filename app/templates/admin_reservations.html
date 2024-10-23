@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Керування бронюваннями{% endblock %}
+
+{% block content %}
+<h1>Всі бронювання</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ім'я</th>
+            <th>Email</th>
+            <th>Дата бронювання</th>
+            <th>Кількість осіб</th>
+            <th>Дія</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reservation in reservations %}
+        <tr>
+            <td>{{ reservation.name }}</td>
+            <td>{{ reservation.email }}</td>
+            <td>{{ reservation.reservation_date }}</td>
+            <td>{{ reservation.number_of_people }}</td>
+            <td>
+                <form action="{{ url_for('delete_reservation', reservation_id=reservation.id) }}" method="POST">
+                    <button type="submit" class="btn btn-danger">Видалити</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

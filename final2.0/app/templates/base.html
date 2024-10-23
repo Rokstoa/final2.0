@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ложка та Виделка{% endblock %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ url_for('index') }}">Ложка та Виделка</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('index') }}">Головна</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('menu') }}">Меню</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('reserve') }}">Бронювання</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('support') }}">Підтримка</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('profile') }}">Профіль</a>
+            </li>
+            {% if current_user.is_authenticated %}
+                {% if current_user.is_admin %}
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('my_support_messages') }}">Мої запити підтримки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">Вийти</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('register') }}">Реєстрація</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}">Увійти</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+
+
+
+    <!-- Відображення флеш-повідомлень -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="container mt-4">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Футер -->
+    <footer class="text-center py-4">
+    <div class="social">
+        <a href="https://www.instagram.com/" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="width: 30px; height: 30px;">
+        </a>
+        <a href="https://www.tiktok.com/" target="_blank">
+            <img src="data:image/png;base64,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" alt="TikTok" style="width: 30px; height: 30px;">
+        </a>
+    </div>
+    <div class="contact-info mt-2">
+        <p>Адреса: вул. Прикладна, 123, Місто</p>
+        <p>Електронна пошта: example@email.com</p>
+    </div>
+    <p class="mt-4">&copy; 2024 Ложка та Вилка. Всі права захищені.</p>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

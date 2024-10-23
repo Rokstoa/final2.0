@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Відповідь на запит{% endblock %}
+
+{% block content %}
+<h1>Відповідь на запит користувача {{ message.user.username }}</h1>
+<p><strong>Повідомлення:</strong> {{ message.message }}</p>
+<form method="POST">
+    <div class="form-group">
+        <label for="response">Ваша відповідь:</label>
+        <textarea class="form-control" name="response" id="response" rows="4" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-success">Відправити відповідь</button>
+</form>
+{% endblock %}
